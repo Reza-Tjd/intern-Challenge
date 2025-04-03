@@ -7,13 +7,13 @@
 </template>
 
 <style scoped>
-  .app {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 1024px;
-    align-self: center;
-    min-height: 100%;
-    padding-bottom: 24px;
-  }
+.app {
+  margin: 0 auto;             
+  padding: 24px;
+  max-width: 1024px;
+  min-height: 100vh;         
+  display: flex;
+  flex-direction: column;
+}
+
 </style>
