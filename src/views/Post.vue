@@ -28,9 +28,7 @@
 </template>
 
 <style scoped>
-  /* .back {
-    color: #46f;
-  } */
+
   .single-post-container {
     max-width: 800px;
     margin: 0 auto;

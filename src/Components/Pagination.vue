@@ -12,17 +12,34 @@
       </li>
     </ul>
     <!-- pagination bar -->
-    <div class="pagination-buttons">
-      <button @click="FirstPageHandler">First</button>
-      <button
-        @click="gotoPage(number)"
-        v-for="number in pageNumbers"
-        :key="number"
-        :class="{ active: currentPage === number }"
-      >
-        {{ number }}
-      </button>
-      <button @click="lastPageHandler">Last</button>
+    <div class="btn-search-holder">
+      <div class="pagination-buttons">
+        <button @click="FirstPageHandler">First</button>
+        <button
+          @click="gotoPage(number)"
+          v-for="number in pageNumbers"
+          :key="number"
+          :class="{ active: currentPage === number }"
+        >
+          {{ number }}
+        </button>
+        <button @click="lastPageHandler">Last</button>
+      </div>
+      <div class="search-input-wrapper">
+        <input
+          type="search"
+          placeholder="Search page"
+          class="search-bar"
+          v-model="searchValue"
+          @keyup.enter="searchHandler"
+        />
+        <font-awesome-icon
+          :icon="['fas', 'arrow-right-to-bracket']"
+          class="search-icon"
+          @click="searchHandler"
+          :class="{ active: Number(searchValue) === currentPage }"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -32,6 +49,7 @@
   const props = defineProps({ allData: Array });
   const currentPage = ref(1);
   const itemPerPage = 3;
+  const searchValue = ref('');
   const totalPage = computed(() => {
     return Math.ceil(props.allData.length / itemPerPage);
   });
@@ -48,6 +66,8 @@
   function FirstPageHandler() {
     currentPage.value = 1;
   }
+
+
 
   function lastPageHandler() {
     currentPage.value = totalPage.value;
@@ -72,6 +92,19 @@
 
   function gotoPage(number) {
     currentPage.value = number;
+  }
+
+
+
+  function searchHandler() {
+    const page = Number(searchValue.value) ;
+
+    if (page > 0 && page <= totalPage.value) {
+      gotoPage(page);
+      searchValue.value = '';
+    } else {
+      alert('Invalid page number');
+    }
   }
 </script>
 
@@ -122,18 +155,42 @@
     color: #555;
   }
 
-  .pagination-buttons {
+  .btn-search-holder {
     display: flex;
     justify-content: center;
-    margin: 0 auto;
-    gap: 5px;
+    gap: 10px;
+    margin-top: 30px;
     flex-wrap: wrap;
-    position: fixed;
+  }
+
+  .search-bar {
+    outline: none;
+    width: 100px;
+    height: 28px;
+    border-radius: 3px;
+    justify-content: center;
+    border: 1px solid rgb(201, 197, 197);
+    /* margin-left: 5px; */
+    padding-left: 4px;
+  }
+
+  .search-bar::placeholder {
+    text-align: center;
+  }
+
+  .pagination-buttons {
+    /* display: flex; */
+    /* justify-content: center; */
+    /* margin: 0 auto; */
+    /* gap: 50px; */
+    /* flex-wrap: wrap; */
+    /* position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 12px;
-    background: white;
+    left: 0; */
+    /* width: 100%; */
+    /* padding: 12px; */
+    /* background: white; */
+    display: inline-block;
   }
 
   .pagination-buttons button {
@@ -143,6 +200,7 @@
     background-color: #fff;
     cursor: pointer;
     transition: all 0.2s;
+    margin-right: 2px;
   }
 
   .pagination-buttons button:hover {
@@ -155,9 +213,33 @@
     border-color: #007bff;
   }
 
+  .search-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgb(201, 197, 197);
+    border-radius: 3px;
+    padding: 0 6px;
+  }
+
+  .search-bar {
+    outline: none;
+    width: 100px;
+    height: 28px;
+    border: none;
+    padding-left: 4px;
+    background: transparent;
+  }
+
+  .search-icon {
+    cursor: pointer;
+    margin-left: 6px;
+    color: #333;
+  }
+
   @media (max-width: 600px) {
     .pagination-container {
       padding: 10px;
+      font-size: 11px;
     }
 
     .post-item {
@@ -166,6 +248,10 @@
 
     .pagination-buttons button {
       padding: 5px 8px;
+    }
+
+    h1 {
+      font-size: 25px;
     }
   }
 </style>
